@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Position Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Coordonnées de votre position actuelle (à remplacer par les coordonnées réelles obtenues)
+        var currentLatitude = 52.5;
+        var currentLongitude = 100;
+
+        // Coordonnées de votre ancienne position (à remplacer par les coordonnées réelles)
+        var oldLatitude =6.37028;
+        var oldLongitude = 2.3;
+
+        var map = L.map('map').setView([currentLatitude, currentLongitude], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Marqueur pour votre position actuelle
+        var currentMarker = L.marker([currentLatitude, currentLongitude]).addTo(map)
+            .bindPopup('Votre position actuelle').openPopup();
+
+        // Marqueur pour votre ancienne position
+        var oldMarker = L.marker([oldLatitude, oldLongitude]).addTo(map)
+            .bindPopup('Votre ancienne position').openPopup();
+
+        // Obtenir la géolocalisation de l'utilisateur
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                // Mettre à jour les coordonnées de la position actuelle
+                currentLatitude = position.coords.latitude;
+                currentLongitude = position.coords.longitude;
+
+           
+                // Mettre à jour la position du marqueur actuel
+                currentMarker.setLatLng([currentLatitude, currentLongitude]);
+
+                // Mettre à jour la position du marqueur ancien (garder les anciennes coordonnées)
+                oldMarker.setLatLng([oldLatitude, oldLongitude]);
+
+                // Centrer la carte sur la position actuelle
+                map.setView([currentLatitude, currentLongitude], 13);
+                let earthRadius = 6371; // Rayon moyen de la Terre en kilomètres
+
+                // Conversion des coordonnées de degrés en radians
+                let radLat1 = Math.PI * oldLatitude/ 180;
+                let radLon1 = Math.PI * oldLongitude / 180;
+                let radLat2 = Math.PI * currentLatitude / 180;
+                let radLon2 = Math.PI * currentLongitude / 180;
+            
+                // Différence de latitude et de longitude
+                let dLat = radLat2 - radLat1;
+                let dLon = radLon2 - radLon1;
+            
+                // Formule de la distance haversine
+                let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                          Math.cos(radLat1) * Math.cos(radLat2) *
+                          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            
+                // Distance en kilomètres
+                let distance = earthRadius * c;
+                console.log(distance.toFixed(2))
+
+            });
+        }
+    </script>
+
+    
+</body>
+</html>
