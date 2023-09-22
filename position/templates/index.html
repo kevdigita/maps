@@ -2,25 +2,61 @@
 <html>
 <head>
     <title>Position Map</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         #map {
-            height: 400px;
+            height: 800px;
         }
     </style>
 </head>
 <body>
+        <div class="container"><br><br>
+            <center><h1>Localisation</h1></center>
+            <form>
+                <div class="form-row">
+                  <div class="col-md-4 mb-3">
+                    <label for="validationServer01">Longitude</label>
+                    <input type="text" class="form-control is-valid" id="longitude" placeholder="Longitude" required>
+                    
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="validationServer02">Latitude</label>
+                    <input type="text" class="form-control is-valid" id="latitude" placeholder="Latitude"  required>
+                    
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="validationServerUsername">Distance</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control is-valid" disabled id="dis"  required> <span></span><span style="font-weight: bold; font-size: 25px;"> Km </span>
+                    </div>
+                  </div>
+                </div>
+               
+              </form><br><br>
+              <button class="btn btn-primary" onclick="rechercher()" type="submit">Recherché</button>
+        </div>
+    
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
     <script>
-        // Coordonnées de votre position actuelle (à remplacer par les coordonnées réelles obtenues)
+          
+       function rechercher(){
+        dis = document.getElementById('dis')
+             // Coordonnées de votre position actuelle (à remplacer par les coordonnées réelles obtenues)    
+        var longitude =parseInt(document.getElementById('longitude').value) 
+        var latitude = parseInt(document.getElementById('latitude').value)
         var currentLatitude = 52.5;
         var currentLongitude = 100;
 
         // Coordonnées de votre ancienne position (à remplacer par les coordonnées réelles)
-        var oldLatitude =6.37028;
-        var oldLongitude = 2.3;
+        var oldLatitude =longitude;
+        var oldLongitude = latitude;
 
         var map = L.map('map').setView([currentLatitude, currentLongitude], 13);
 
@@ -72,10 +108,16 @@
             
                 // Distance en kilomètres
                 let distance = earthRadius * c;
+            
                 console.log(distance.toFixed(2))
+                dis.value = distance.toFixed(2)
+
+
 
             });
         }
+       }
+       
     </script>
 
     
